@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head> <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script></head>
+<body >
+    <script>
+       window.addEventListener( "load", function () {
+        function sendData() {
+            const XHR = new XMLHttpRequest();
+
+            // Bind the FormData object and the form element
+            const FD = new FormData( form );
+
+            // Define what happens on successful data submission
+            XHR.addEventListener( "load", function(event) {
+      
+            document.getElementById("tabledata").innerHTML =event.target.responseText
+        } );
+
+        // Define what happens in case of error
+        XHR.addEventListener( "error", function( event ) {
+            alert( event.message );
+        } );
+
+        // Set up our request
+         XHR.open( "POST", "/show" );
+
+        // The data sent is what the user provided in the form
+        XHR.send( FD );
+    }
+
+    // Access the form element...
+    const form = document.getElementById( "transactionForm" );
+
+    // ...and take over its submit event.
+    form.addEventListener( "submit", function ( event ) {
+        document.getElementById("tabledata").innerHTML ="<h6>Fetching Results...</h6>"
+        event.preventDefault();
+        sendData();
+    } );  
+} );
+</script>
+    <div class="container">
+        <form id="transactionForm"> 
+        <div class="row align-right">
+            <button type="button" class="btn btn-default ">CANCEL</button>
+            <button type="submit" class="btn btn-primary"  >APPLY</button>
+            
+        </div>
+        <p>Please complete the database related fields</p> <br/>
+        <div class="row">
+            <div class="col-sm-3"><label>Host/IP address:</label><input class="input"  type="text" class="form-control" name="host" placeholder="Host/IP address"/></div>
+            <div class="col-sm-3"><label>Port:</label><input class="input"  type="text" class="form-control" name="port" placeholder="Port"/></div>
+            <div class="col-sm-3"><label>Username:</label><input class="input"  type="text" class="form-control" name="username" placeholder="Username"/></div> 
+        </div>  
+        <div class="row">
+            <div class="col-sm-3"><label>Password:</label><input class="input"  type="password" class="form-control" name="password" placeholder="Password"/></div>
+            <div class="col-sm-3"><label>Database Name:</label><input class="input"  type="text" class="form-control" name="db" placeholder="Database Name"/></div>
+            <div class="col-sm-3"><label>Schedule:</label><input class="input"  type="date" class="form-control" name="time" placeholder=""/></div> 
+        </div>  
+        <div class="row">
+            <div class="col-sm-3"><label>Database Type:</label>
+                <select class="input form-control" name="dbType">
+                <option>POSTGRESQL</option>
+                <option>MSSQL</option>
+                <option>MYSQL</option>
+                <option>ORACLE</option>
+              </select>
+            </div>
+         </div>  
+        </form>
+    </div> 
+   <div id="tabledata"></div>
+</body>
