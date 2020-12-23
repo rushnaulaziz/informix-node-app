@@ -44,13 +44,15 @@ function fetchData(res, args){
   let query ='select first 10 * from haglog'
   let result = dbFunc.fetchResult(query,args)
   
-  if(result.error) {
-       res.status(403)
-       return res.end()
+  if(!result.error) {
+    writeDataInTable(result)
+    sendFile(res, 'table.html', "text/html", 'utf8',200) 
 
   }
-  writeDataInTable(data)
-  sendFile(res, 'table.html', "text/html", 'utf8',200) 
+  res.writeHead(403, {"Content-Type":"text/plain"});
+  res.write(result.message);
+  res.end();
+  
 }
 function writeDataInTable( data ) {   
   let html = "<h3> Results: </h3><table><tr>";  
